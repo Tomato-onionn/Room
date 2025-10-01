@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const db = require("../models");
+const meetingRoomController = require("../controllers/meetingroom.controller");
 
 /**
  * @swagger
@@ -83,31 +83,7 @@ const db = require("../models");
  *       500:
  *         description: Lỗi server
  */
-router.get("/", async (req, res) => {
-  try {
-    const { status, mentor_id, user_id } = req.query;
-    let whereClause = {};
-    
-    if (status) whereClause.status = status;
-    if (mentor_id) whereClause.mentor_id = mentor_id;
-    if (user_id) whereClause.user_id = user_id;
-
-    const rooms = await db.MeetingRoom.findAll({
-      where: whereClause,
-      include: [
-        {
-          model: db.MeetingRoomDetail,
-          as: 'details',
-          required: false
-        }
-      ],
-      order: [['start_time', 'DESC']]
-    });
-    res.json(rooms);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.get("/", meetingRoomController.getAllRooms);
 
 /**
  * @swagger
@@ -134,23 +110,7 @@ router.get("/", async (req, res) => {
  *       500:
  *         description: Lỗi server
  */
-router.get("/:id", async (req, res) => {
-  try {
-    const room = await db.MeetingRoom.findByPk(req.params.id, {
-      include: [
-        {
-          model: db.MeetingRoomDetail,
-          as: 'details',
-          required: false
-        }
-      ]
-    });
-    if (!room) return res.status(404).json({ error: "Room not found" });
-    res.json(room);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.get("/:id", meetingRoomController.getRoomById);
 
 /**
  * @swagger
@@ -203,24 +163,7 @@ router.get("/:id", async (req, res) => {
  *       500:
  *         description: Lỗi server
  */
-router.post("/", async (req, res) => {
-  try {
-    const { room_name, mentor_id, user_id, start_time, end_time, status } = req.body;
-    
-    const newRoom = await db.MeetingRoom.create({
-      room_name,
-      mentor_id,
-      user_id,
-      start_time,
-      end_time,
-      status: status || 'scheduled'
-    });
-    
-    res.status(201).json(newRoom);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.post("/", meetingRoomController.createRoom);
 
 /**
  * @swagger
@@ -260,17 +203,7 @@ router.post("/", async (req, res) => {
  *       500:
  *         description: Lỗi server
  */
-router.put("/:id", async (req, res) => {
-  try {
-    const room = await db.MeetingRoom.findByPk(req.params.id);
-    if (!room) return res.status(404).json({ error: "Room not found" });
-    
-    await room.update(req.body);
-    res.json(room);
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.put("/:id", meetingRoomController.updateRoom);
 
 /**
  * @swagger
@@ -292,16 +225,6 @@ router.put("/:id", async (req, res) => {
  *       500:
  *         description: Lỗi server
  */
-router.delete("/:id", async (req, res) => {
-  try {
-    const room = await db.MeetingRoom.findByPk(req.params.id);
-    if (!room) return res.status(404).json({ error: "Room not found" });
-    
-    await room.destroy();
-    res.json({ message: "Room deleted successfully" });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
+router.delete("/:id", meetingRoomController.deleteRoom);
 
 module.exports = router;
