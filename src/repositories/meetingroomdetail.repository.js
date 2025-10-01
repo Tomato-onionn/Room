@@ -26,19 +26,6 @@ class MeetingRoomDetailRepository {
     });
   }
 
-  async findByRoomId(roomId) {
-    return await db.MeetingRoomDetail.findOne({
-      where: { room_id: roomId },
-      include: [
-        {
-          model: db.MeetingRoom,
-          as: 'room',
-          required: false
-        }
-      ]
-    });
-  }
-
   async create(data) {
     return await db.MeetingRoomDetail.create(data);
   }

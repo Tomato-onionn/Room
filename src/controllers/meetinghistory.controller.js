@@ -24,8 +24,7 @@ class MeetingHistoryController {
 
   async getHistoryByRoomId(req, res) {
     try {
-      const { limit } = req.query;
-      const history = await meetingHistoryService.getHistoryByRoomId(req.params.roomId, limit);
+      const history = await meetingHistoryService.getHistoryByRoomId(req.params.roomId);
       res.json(history);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -34,8 +33,7 @@ class MeetingHistoryController {
 
   async getHistoryByUserId(req, res) {
     try {
-      const { limit } = req.query;
-      const history = await meetingHistoryService.getHistoryByUserId(req.params.userId, limit);
+      const history = await meetingHistoryService.getHistoryByUserId(req.params.userId);
       res.json(history);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -44,8 +42,7 @@ class MeetingHistoryController {
 
   async getHistoryByMentorId(req, res) {
     try {
-      const { limit } = req.query;
-      const history = await meetingHistoryService.getHistoryByMentorId(req.params.mentorId, limit);
+      const history = await meetingHistoryService.getHistoryByMentorId(req.params.mentorId);
       res.json(history);
     } catch (error) {
       res.status(500).json({ error: error.message });
@@ -59,30 +56,6 @@ class MeetingHistoryController {
     } catch (error) {
       if (error.message.includes("Missing required fields") || error.message === "Room not found") {
         return res.status(400).json({ error: error.message });
-      }
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  async updateHistory(req, res) {
-    try {
-      const updatedHistory = await meetingHistoryService.updateHistory(req.params.id, req.body);
-      res.json(updatedHistory);
-    } catch (error) {
-      if (error.message === "History not found") {
-        return res.status(404).json({ error: error.message });
-      }
-      res.status(500).json({ error: error.message });
-    }
-  }
-
-  async deleteHistory(req, res) {
-    try {
-      const result = await meetingHistoryService.deleteHistory(req.params.id);
-      res.json(result);
-    } catch (error) {
-      if (error.message === "History not found") {
-        return res.status(404).json({ error: error.message });
       }
       res.status(500).json({ error: error.message });
     }

@@ -63,12 +63,6 @@ const meetingHistoryController = require("../controllers/meetinghistory.controll
  *         schema:
  *           type: integer
  *         description: Lọc theo user ID
- *       - in: query
- *         name: limit
- *         schema:
- *           type: integer
- *           default: 50
- *         description: Giới hạn số lượng kết quả
  *     responses:
  *       200:
  *         description: Danh sách lịch sử meeting
@@ -88,7 +82,5 @@ router.get("/user/:userId", meetingHistoryController.getHistoryByUserId);
 router.get("/mentor/:mentorId", meetingHistoryController.getHistoryByMentorId);
 router.get("/stats/duration", meetingHistoryController.getDurationStats);
 router.post("/", meetingHistoryController.createHistory);
-router.put("/:id", meetingHistoryController.updateHistory);
-router.delete("/:id", meetingHistoryController.deleteHistory);
 
 module.exports = router;

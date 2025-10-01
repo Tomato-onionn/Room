@@ -1,7 +1,7 @@
 const db = require("../models");
 
 class MeetingHistoryRepository {
-  async findAll(whereClause = {}, limit = 50) {
+  async findAll(whereClause = {}) {
     return await db.MeetingHistory.findAll({
       where: whereClause,
       include: [
@@ -11,8 +11,7 @@ class MeetingHistoryRepository {
           required: false
         }
       ],
-      order: [['completed_at', 'DESC']],
-      limit: parseInt(limit)
+      order: [['completed_at', 'DESC']]
     });
   }
 
@@ -28,36 +27,20 @@ class MeetingHistoryRepository {
     });
   }
 
-  async findByRoomId(roomId, limit = 10) {
-    return await this.findAll({ room_id: roomId }, limit);
+  async findByRoomId(roomId) {
+    return await this.findAll({ room_id: roomId });
   }
 
-  async findByUserId(userId, limit = 20) {
-    return await this.findAll({ user_id: userId }, limit);
+  async findByUserId(userId) {
+    return await this.findAll({ user_id: userId });
   }
 
-  async findByMentorId(mentorId, limit = 20) {
-    return await this.findAll({ mentor_id: mentorId }, limit);
+  async findByMentorId(mentorId) {
+    return await this.findAll({ mentor_id: mentorId });
   }
 
   async create(data) {
     return await db.MeetingHistory.create(data);
-  }
-
-  async update(id, data) {
-    const history = await this.findById(id);
-    if (!history) return null;
-    
-    await history.update(data);
-    return history;
-  }
-
-  async delete(id) {
-    const history = await this.findById(id);
-    if (!history) return false;
-    
-    await history.destroy();
-    return true;
   }
 
   async getStats(whereClause = {}) {

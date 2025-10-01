@@ -22,18 +22,6 @@ class MeetingRoomDetailController {
     }
   }
 
-  async getDetailByRoomId(req, res) {
-    try {
-      const detail = await meetingRoomDetailService.getDetailByRoomId(req.params.roomId);
-      res.json(detail);
-    } catch (error) {
-      if (error.message === "Detail not found for this room") {
-        return res.status(404).json({ error: error.message });
-      }
-      res.status(500).json({ error: error.message });
-    }
-  }
-
   async createDetail(req, res) {
     try {
       const newDetail = await meetingRoomDetailService.createDetail(req.body);

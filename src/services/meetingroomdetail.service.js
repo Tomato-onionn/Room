@@ -27,18 +27,6 @@ class MeetingRoomDetailService {
     }
   }
 
-  async getDetailByRoomId(roomId) {
-    try {
-      const detail = await meetingRoomDetailRepository.findByRoomId(roomId);
-      if (!detail) {
-        throw new Error("Detail not found for this room");
-      }
-      return detail;
-    } catch (error) {
-      throw error;
-    }
-  }
-
   async createDetail(data) {
     try {
       // Validate required fields

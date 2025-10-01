@@ -4,6 +4,13 @@ class MeetingRoomRepository {
   async findAll(whereClause = {}) {
     return await db.MeetingRoom.findAll({
       where: whereClause,
+      order: [['start_time', 'DESC']]
+    });
+  }
+
+  async findAllWithDetails(whereClause = {}) {
+    return await db.MeetingRoom.findAll({
+      where: whereClause,
       include: [
         {
           model: db.MeetingRoomDetail,
@@ -16,6 +23,10 @@ class MeetingRoomRepository {
   }
 
   async findById(id) {
+    return await db.MeetingRoom.findByPk(id);
+  }
+
+  async findByIdWithDetails(id) {
     return await db.MeetingRoom.findByPk(id, {
       include: [
         {

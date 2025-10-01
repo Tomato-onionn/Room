@@ -1,4 +1,5 @@
 const meetingRoomRepository = require("../repositories/meetingroom.repository");
+const meetingRoomDetailRepository = require("../repositories/meetingroomdetail.repository");
 
 class MeetingRoomService {
   async getAllRooms(filters = {}) {

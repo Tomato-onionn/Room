@@ -4,14 +4,14 @@ const meetingRoomRepository = require("../repositories/meetingroom.repository");
 class MeetingHistoryService {
   async getAllHistory(filters = {}) {
     try {
-      const { room_id, mentor_id, user_id, limit = 50 } = filters;
+      const { room_id, mentor_id, user_id } = filters;
       let whereClause = {};
       
       if (room_id) whereClause.room_id = room_id;
       if (mentor_id) whereClause.mentor_id = mentor_id;
       if (user_id) whereClause.user_id = user_id;
 
-      return await meetingHistoryRepository.findAll(whereClause, limit);
+      return await meetingHistoryRepository.findAll(whereClause);
     } catch (error) {
       throw new Error(`Error getting meeting history: ${error.message}`);
     }
@@ -29,25 +29,25 @@ class MeetingHistoryService {
     }
   }
 
-  async getHistoryByRoomId(roomId, limit = 10) {
+  async getHistoryByRoomId(roomId) {
     try {
-      return await meetingHistoryRepository.findByRoomId(roomId, limit);
+      return await meetingHistoryRepository.findByRoomId(roomId);
     } catch (error) {
       throw new Error(`Error getting history by room: ${error.message}`);
     }
   }
 
-  async getHistoryByUserId(userId, limit = 20) {
+  async getHistoryByUserId(userId) {
     try {
-      return await meetingHistoryRepository.findByUserId(userId, limit);
+      return await meetingHistoryRepository.findByUserId(userId);
     } catch (error) {
       throw new Error(`Error getting history by user: ${error.message}`);
     }
   }
 
-  async getHistoryByMentorId(mentorId, limit = 20) {
+  async getHistoryByMentorId(mentorId) {
     try {
-      return await meetingHistoryRepository.findByMentorId(mentorId, limit);
+      return await meetingHistoryRepository.findByMentorId(mentorId);
     } catch (error) {
       throw new Error(`Error getting history by mentor: ${error.message}`);
     }
@@ -68,30 +68,6 @@ class MeetingHistoryService {
       }
 
       return await meetingHistoryRepository.create(data);
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async updateHistory(id, data) {
-    try {
-      const updatedHistory = await meetingHistoryRepository.update(id, data);
-      if (!updatedHistory) {
-        throw new Error("History not found");
-      }
-      return updatedHistory;
-    } catch (error) {
-      throw error;
-    }
-  }
-
-  async deleteHistory(id) {
-    try {
-      const deleted = await meetingHistoryRepository.delete(id);
-      if (!deleted) {
-        throw new Error("History not found");
-      }
-      return { message: "History deleted successfully" };
     } catch (error) {
       throw error;
     }
